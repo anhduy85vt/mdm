@@ -123,23 +123,58 @@ function copyCmd() {
     </div>
 </div>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<div style="background: #1e1e1e; padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid #333; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+    <p style="color: #00d2ff; margin-bottom: 12px; font-weight: bold; font-family: sans-serif;">
+        <i class="fas fa-terminal"></i> Lệnh Bypass MDM:
+    </p>
+    
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div id="cmd-text" style="color: #00ff00; background: #000; padding: 15px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.4; word-break: break-all; border: 1px solid #444;">curl -L https://raw.githubusercontent.com/anhduy85vt/mdm/refs/heads/main/mdm.sh -o test.sh && chmod +x ./test.sh && ./test.sh</div>
+        
+        <button onclick="copyCmd()" id="copy-btn" style="background: #0071e3; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; font-family: sans-serif;">
+            <i class="fas fa-copy"></i> SAO CHÉP LỆNH
+        </button>
+    </div>
+</div>
+
 <script>
 function copyCmd() {
-    const text = document.getElementById('cmd-text').innerText;
+    // Lấy nội dung văn bản từ thẻ div có id là cmd-text
+    const textToCopy = document.getElementById('cmd-text').innerText;
     const btn = document.getElementById('copy-btn');
     
-    navigator.clipboard.writeText(text).then(() => {
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
-        btn.style.background = '#28a745';
-        
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.style.background = '#0071e3';
-        }, 2000);
-    }).catch(err => {
-        console.error('Lỗi khi copy: ', err);
-    });
+    // Sử dụng API clipboard hiện đại
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            updateButtonStyle(btn);
+        });
+    } else {
+        // Cách dự phòng cho trình duyệt cũ hoặc không có HTTPS
+        const textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            updateButtonStyle(btn);
+        } catch (err) {
+            console.error('Không thể copy', err);
+        }
+        document.body.removeChild(textArea);
+    }
+}
+
+function updateButtonStyle(btn) {
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check"></i> ĐÃ SAO CHÉP!';
+    btn.style.background = '#28a745';
+    
+    setTimeout(() => {
+        btn.innerHTML = originalContent;
+        btn.style.background = '#0071e3';
+    }, 2000);
 }
 </script>
         gõ số 1 và Enter.

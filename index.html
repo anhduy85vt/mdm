@@ -31,12 +31,41 @@
         }
         h1 { text-align: center; color: var(--primary); font-size: 2.2rem; }
         h2 { border-bottom: 2px solid var(--bg); padding-bottom: 10px; margin-top: 30px; color: #333; }
-        h3 { color: var(--primary); }
         .step { background: #f9f9fb; border-left: 4px solid var(--primary); padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
-        code { background: var(--code-bg); color: #fff; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', Courier, monospace; }
-        pre { background: var(--code-bg); color: #88eeff; padding: 15px; border-radius: 8px; overflow-x: auto; position: relative; }
+        code { background: var(--code-bg); color: #fff; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; }
+        
+        /* Style cho ô Copy */
+        .copy-box {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #444;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cmd-text {
+            color: #fff;
+            font-family: monospace;
+            flex-grow: 1;
+            word-break: break-all;
+            font-size: 0.9rem;
+        }
+        .btn-copy {
+            background: #0071e3;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        
+        img { max-width: 100%; border-radius: 8px; margin: 10px 0; display: block; }
         .note { background: #fff4e5; border: 1px solid #ffe5b4; padding: 15px; border-radius: 8px; margin: 20px 0; font-style: italic; }
-        .important { color: #d70000; font-weight: bold; }
         .footer { text-align: center; margin-top: 40px; font-size: 0.9rem; color: #888; }
     </style>
 </head>
@@ -52,113 +81,88 @@
     <div class="step">
         <strong>Bước 1:</strong> Tại màn hình Setup (WiFi), chọn <strong>Other Network Options</strong> -> <strong>Continue</strong>.
     </div>
-    <img src="1.jpg" style="max-width:100%; border-radius:8px; margin: 10px 0;">
+    <img src="1.jpg" alt="Step 1">
+
     <div class="step">
-        <strong>Bước 2:</strong> Tích chọn và tiếp tục Setup như bình thường cho đến khi vào màn hình Desktop.
+        <strong>Bước 2:</strong> Tích chọn và tiếp tục Setup như bình thường.
     </div>
-       <img src="2.jpg" style="max-width:100%; border-radius:8px; margin: 10px 0;">
+    <img src="2.jpg" alt="Step 2">
+
     <div class="step">
         <strong>Bước 3:</strong> Kết nối WiFi, mở <strong>Terminal</strong> và dán lệnh sau:
     </div>
-    <div style="background: #2d2d2d; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #444;">
-    <p style="color: #00ccff; margin-top: 0; font-weight: bold; font-size: 0.9rem;">(Copy và dán vào Terminal):</p>
-    <div style="display: flex; align-items: center; gap: 10px;">
-        <code id="cmd-text" style="color: #fff; background: none; padding: 0; font-family: monospace; flex-grow: 1; word-break: break-all;"> sudo sh -c "echo '0.0.0.0 deviceenrollment.apple.com\n0.0.0.0 mdmenrollment.apple.com\n0.0.0.0 iprofiles.apple.com' >> /etc/hosts"; cat /etc/hosts | grep apple </code>
-        <button onclick="copyCmd()" id="copy-btn" style="background: #0071e3; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; white-space: nowrap; font-size: 0.8rem;">
-            <i class="fas fa-copy"></i> Copy
-        </button>
-    </div>
-</div>
 
-<script>
-function copyCmd() {
-    const text = document.getElementById('cmd-text').innerText;
-    const btn = document.getElementById('copy-btn');
-    
-    navigator.clipboard.writeText(text).then(() => {
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
-        btn.style.background = '#28a745';
-        
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.style.background = '#0071e3';
-        }, 2000);
-    }).catch(err => {
-        console.error('Lỗi khi copy: ', err);
-    });
-}
-</script>
+    <div class="copy-box">
+        <div class="cmd-text">sudo sh -c "echo '0.0.0.0 deviceenrollment.apple.com\n0.0.0.0 mdmenrollment.apple.com\n0.0.0.0 iprofiles.apple.com' >> /etc/hosts"; cat /etc/hosts | grep apple</div>
+        <button class="btn-copy" onclick="copyAction(this)"><i class="fas fa-copy"></i> Copy</button>
+    </div>
+
     <p class="note"><i class="fas fa-info-circle"></i> <strong>Lưu ý:</strong> Khi nhập Password sẽ không hiện ký tự, cứ gõ đúng rồi Enter.</p>
 
     <div class="note">
-         <img src="3.jpg" style="max-width:100%; border-radius:8px; margin: 10px 0;">
-         <img src="4.jpg" style="max-width:100%; border-radius:8px; margin: 10px 0;">
-        <strong>Mẹo nhỏ:</strong> Nếu máy bắt buộc cài MDM không bỏ qua được, hãy dùng một WiFi độc lập, khi cài đến 90% thì tắt modem WiFi đó đi để "đánh lừa" bước Active.
+        <img src="3.jpg" alt="Mẹo 1">
+        <img src="4.jpg" alt="Mẹo 2">
+        <strong>Mẹo nhỏ:</strong> Tắt modem wifi khi cài đến 90% để bỏ qua bước đăng nhập MDM.
     </div>
 
-    <h2>2. Dành cho Ventura trở lên </h2>
+    <h2>2. Dành cho Ventura trở lên</h2>
     <div class="step">
-        <strong>Bước 1:</strong> Tại màn hình Hello, đè nguồn để tắt máy hẳn. Sau đó vào <strong>Recovery Mode</strong>.
+        <strong>Bước 1:</strong> Vào <strong>Recovery Mode</strong>.
         <ul>
-                 <img src="5.jpg" style="max-width:100%; border-radius:8px; margin: 10px 0;">
+            <img src="5.jpg" alt="Recovery">
             <li>Intel: Giữ <code>Cmd + R</code></li>
             <li>Chip M: Giữ nút Nguồn 10 giây.</li>
         </ul>
     </div>
+
     <div class="step">
-        <strong>Bước 2:</strong> Vào <strong>Options</strong> -> <strong>Safari</strong>. Truy cập: <code>https://anhduy85vt.github.io/mdm/</code> và copy đoạn code bên dưới.
+        <strong>Bước 2:</strong> Vào Safari, truy cập trang này và copy lệnh bên dưới.
     </div>
-         <img src="6.jpg" style="max-width:100%; border-radius:8px; margin: 10px 0;">
-         <img src="7.jpg" style="max-width:100%; border-radius:8px; margin: 10px 0;">
+    <img src="6.jpg" alt="Safari">
+    <img src="7.jpg" alt="Step 7">
+
     <div class="step">
-        <strong>Bước 3:</strong> Thoát Safari, chọn <strong>Utilities</strong> -> <strong>Terminal</strong>. Dán lệnh: 
-        <div style="background: #2d2d2d; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #444;">
-    <p style="color: #00ccff; margin-top: 0; font-weight: bold; font-size: 0.9rem;">(Copy và dán vào Terminal):</p>
-    <div style="display: flex; align-items: center; gap: 10px;">
-        <code id="cmd-text" style="color: #fff; background: none; padding: 0; font-family: monospace; flex-grow: 1; word-break: break-all;">curl -L https://raw.githubusercontent.com/anhduy85vt/mdm/refs/heads/main/mdm.sh -o test.sh && chmod +x ./test.sh && ./test.sh</code>
-        <button onclick="copyCmd()" id="copy-btn" style="background: #0071e3; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; white-space: nowrap; font-size: 0.8rem;">
-            <i class="fas fa-copy"></i> Copy
-        </button>
+        <strong>Bước 3:</strong> Mở Terminal và dán lệnh:
     </div>
-<script>
-function copyCmd() {
-    const text = document.getElementById('cmd-text').innerText;
-    const btn = document.getElementById('copy-btn');
-    
-    navigator.clipboard.writeText(text).then(() => {
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
-        btn.style.background = '#28a745';
-        
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.style.background = '#0071e3';
-        }, 2000);
-    }).catch(err => {
-        console.error('Lỗi khi copy: ', err);
-    });
-}
-</script>
-        gõ số 1 và Enter.
+
+    <div class="copy-box">
+        <div class="cmd-text">curl -L https://raw.githubusercontent.com/anhduy85vt/mdm/refs/heads/main/mdm.sh -o test.sh && chmod +x ./test.sh && ./test.sh</div>
+        <button class="btn-copy" onclick="copyAction(this)"><i class="fas fa-copy"></i> Copy</button>
     </div>
+
     <div class="step">
-        <strong>Bước 4:</strong> Thiết lập User/Pass (Mặc định: User: <code>MAC</code> / Pass: <code>1234</code>). Gõ <code>reboot</code> để khởi động lại.
+        <strong>Bước 4:</strong> Thiết lập User/Pass (Mặc định: MAC / 1234). Gõ <code>reboot</code>.
     </div>
-    <div class="step">
-        <strong>Bước 5:</strong> Sau khi vào máy, dán lệnh chặn Server Apple vào Terminal:
-    </div>
-    <pre>sudo sh -c "echo '0.0.0.0 deviceenrollment.apple.com\n0.0.0.0 mdmenrollment.apple.com\n0.0.0.0 iprofiles.apple.com' >> /etc/hosts"; cat /etc/hosts | grep apple</pre>
 
     <h2>3. Kiểm tra trạng thái</h2>
-    <p>Để chắc chắn máy đã thoát liên kết MDM, dùng lệnh:</p>
-    <pre>profiles status -type enrollment</pre>
+    <div class="copy-box">
+        <div class="cmd-text">profiles status -type enrollment</div>
+        <button class="btn-copy" onclick="copyAction(this)"><i class="fas fa-copy"></i> Copy</button>
+    </div>
     <p>Kết quả hiện <strong>Enrolled via DEP: No</strong> là thành công!</p>
 
     <div class="footer">
         <p>© 2024 - Tài liệu hướng dẫn Bypass macOS</p>
     </div>
 </div>
+
+<script>
+function copyAction(btn) {
+    // Lấy đoạn văn bản nằm ngay bên cạnh nút (trong cùng class copy-box)
+    const textToCopy = btn.parentElement.querySelector('.cmd-text').innerText;
+    
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+        btn.style.background = '#28a745';
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = '#0071e3';
+        }, 2000);
+    });
+}
+</script>
 
 </body>
 </html>
